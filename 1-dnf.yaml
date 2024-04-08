@@ -1,0 +1,66 @@
+---
+- name: Install packages and set hostname
+  hosts: all
+  become: true
+  gather_facts: false
+  vars_files:
+    - vars.yaml
+  tasks:
+    - name: Install packages
+      ansible.builtin.dnf:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - ansible-core
+        - wget
+        - git
+        - rsync
+
+    - name: Change hostname
+      ansible.builtin.hostname:
+        name: "{{ hostname }}"
+
+    - name: Check if ansible-core is installed
+      ansible.builtin.stat:
+        path: /usr/bin/ansible
+      register: ansible_core_installed
+
+    - name: Check if wget is installed
+      ansible.builtin.stat:
+        path: /usr/bin/wget
+      register: wget_installed
+
+    - name: Check if git is installed
+      ansible.builtin.stat:
+        path: /usr/bin/git
+      register: git_installed
+
+    - name: Check if rsync is installed
+      ansible.builtin.stat:
+        path: /usr/bin/rsync
+      register: rsync_installed
+
+    - name: Get hostname output
+      ansible.builtin.command:
+        cmd: "hostname"
+      register: hostname_output
+      changed_when: hostname_output.rc != 0 # <- Uses the return code to define when the task has changed.
+
+    - name: Display installation status
+      ansible.builtin.debug:
+        msg: |
+          - "ansible-core: {{ 'installed' if ansible_core_installed.stat.exists else 'not installed' }}"
+          - "wget: {{ 'installed' if wget_installed.stat.exists else 'not installed' }}"
+          - "git: {{ 'installed' if git_installed.stat.exists else 'not installed' }}"
+          - "rsync: {{ 'installed' if rsync_installed.stat.exists else 'not installed' }}"
+          - "hostname: {{ hostname_output.stdout_lines }}"
+
+    - name: Enable cockpit.socket service
+      ansible.builtin.service:
+        name: cockpit.socket
+        enabled: true
+
+    - name: Start cockpit.socket service
+      ansible.builtin.service:
+        name: cockpit.socket
+        state: started

@@ -1,0 +1,14 @@
+---
+- name: Install packages and set hostname
+  hosts: all
+  become: true
+  gather_facts: false
+  vars_files:
+    - vars.yaml
+  tasks:
+    - name: Replace inventory file
+      ansible.builtin.copy:
+        src: aap_inventory
+        dest: /home/rc/{{ setupfolder }}/inventory
+        force: true
+        mode: "0644"

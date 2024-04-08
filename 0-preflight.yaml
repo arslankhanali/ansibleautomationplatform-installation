@@ -1,0 +1,34 @@
+---
+- name: Check repos , hostname and linux version
+  hosts: all
+  gather_facts: false  # Disable gathering facts to speed up execution
+  tasks:
+    - name: Run dnf repolist command
+      ansible.builtin.command:
+        cmd: "dnf repolist"
+      register: dnf_repolist_output
+      changed_when: dnf_repolist_output.rc != 0 # <- Uses the return code to define when the task has changed.
+
+    - name: Display dnf repolist output
+      ansible.builtin.debug:
+        msg: "{{ dnf_repolist_output.stdout_lines }}"
+
+    - name: Get hostname output
+      ansible.builtin.command:
+        cmd: "hostname"
+      register: hostname_output
+      changed_when: hostname_output.rc != 0 # <- Uses the return code to define when the task has changed.
+
+    - name: Display hostname output
+      ansible.builtin.debug:
+        msg: "{{ hostname_output.stdout_lines }}"
+
+    - name: Get Linux version information
+      ansible.builtin.command:
+        cmd: "cat /etc/redhat-release "
+      register: os_release_output
+      changed_when: os_release_output.rc != 0 # <- Uses the return code to define when the task has changed.
+
+    - name: Display Linux version
+      ansible.builtin.debug:
+        msg: "Linux version is {{ os_release_output.stdout_lines }}"

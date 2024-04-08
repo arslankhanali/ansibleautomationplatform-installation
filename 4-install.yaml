@@ -1,0 +1,19 @@
+---
+- name: Run Ansible playbook in specific directory
+  hosts: all
+  gather_facts: false
+  # become: true
+  vars_files:
+    - vars.yaml
+  tasks:
+    - name: Run Ansible playbook
+      ansible.builtin.command:
+        cmd: "ansible-playbook -i inventory ansible.containerized_installer.install"
+      args:
+        chdir: "/home/rc/{{ setupfolder }}"
+      register: playbook_result
+      changed_when: playbook_result.rc != 0 # <- Uses the return code to define when the task has changed.
+
+    - name: Display playbook result
+      ansible.builtin.debug:
+        var: playbook_result.stdout_lines

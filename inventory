@@ -1,0 +1,10 @@
+[all]
+node3 ansible_host=172.16.79.147
+
+[localhost]
+mac ansible_host=127.0.0.1
+
+[all:vars]
+ansible_user=rc
+ansible_ssh_private_key_file=/Users/arslankhan/.ssh/id_rsa
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
