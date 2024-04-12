@@ -1,26 +1,29 @@
-# Ansible Automation Platform containerized installation
+# Ansible Automation Platform (containerized) installation
 
-This repo helps to install Containerised Ansible Automation Platform on to RHEL 9 node.  
+This repo helps to install `Containerised` `Ansible Automation Platform` on to `RHEL 9.3` VM.  
 It also installs
 1. Automation Hub
 2. Event Driven Ansible
 
 # My Env
-1. A Rhel 9.3 VM
-   1. 4 CPU
+1. My Rhel 9.3 VM has
+   1. 4 vCPU
    2. 16Gb Ram
    3. 40Gb disk
    4. Running on VMware Fusion Workstation
-   5. ansible user = rc
-   6. Its hostname is `node3` # As defined in the inventory file
+   5. ansible user = `rc`
+   6. Its hostname is `node`. PS: During installation ansible will change hostname to `aap`.
+2. I will be running ansible playbooks on my VM using my laptop (MacOS)
 
 # Pre Req
-1. You can run ansible scripts on the node i.e. SSH is already setup
-   1. `inventory` file is in this repo. [Make changes as per your env]
-   2. `ansible.cfg` file is in this repo. [Make changes as per your env]
+1. Basic
+   1. You can run ansible playbooks on the VM i.e. SSH is already setup
+      1. `ansible node -m command -a hostname` -  should work without any error.
+   2. `inventory` file is in this repo. [Make changes as per your env]
+   3. `ansible.cfg` file is in this repo. [Make changes as per your env]
 2. Download `Containerized Setup Bundle` ~ 2Gb from [here](https://access.redhat.com/downloads/content/480/ver=2.4/rhel---9/2.4/x86_64/product-software)
-3. `var_yaml` file in this repo. Use the `var_yaml sample` file to create your own.
-4. `aap_inventory` file in this repo. Use the `aap_inventory sample` one to create your own.
+3. Make `var_yaml` file in this repo. Fill in `var_yaml sample` file and rename to `var_yaml`.
+4. `aap_inventory` file in this repo. Fill in `aap_inventory sample` file and rename it to `aap_inventory`.
    1. I replaced `fqdn_of_your_rhel_host` with `aap`
    2. Uncomment database section because we will deploy DB on to the same node
    3. Add values in mandatory sections
@@ -61,7 +64,7 @@ eda_pg_password=admin@123
 
 # Run
 ```sh 
-cd /Users/arslankhan/Codes/ansible-automation-platform-installation
+cd ~/Codes/ansible-automation-platform-installation
 
 # Pre flight script to check things
 ansible-playbook -l node3 0*.yaml

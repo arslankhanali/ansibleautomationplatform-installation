@@ -1,0 +1,9 @@
+---
+- name: Run 1-dnf.yaml
+  ansible.builtin.import_playbook: 1-dnf.yaml
+- name: Run 2-copysetupbundle.yaml
+  ansible.builtin.import_playbook: 2-copysetupbundle.yaml
+- name: Run 3-copyinventory.yaml
+  ansible.builtin.import_playbook: 3-copyinventory.yaml
+- name: Run 4-install.yaml
+  ansible.builtin.import_playbook: 4-install.yaml

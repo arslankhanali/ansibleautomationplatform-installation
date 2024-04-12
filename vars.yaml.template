@@ -2,5 +2,6 @@ rh_username:
 rh_password: 
 subscription_pool_id: 
 hostname: aap
+hostfolder: ~
 setup: ansible-automation-platform-containerized-setup-bundle-2.4-2-x86_64.tar.gz
 setupfolder: ansible-automation-platform-containerized-setup-bundle-2.4-2-x86_64

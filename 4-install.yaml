@@ -10,7 +10,7 @@
       ansible.builtin.command:
         cmd: "ansible-playbook -i inventory ansible.containerized_installer.install"
       args:
-        chdir: "/home/rc/{{ setupfolder }}"
+        chdir: "{{ hostfolder }}/{{ setupfolder }}"
       register: playbook_result
       changed_when: playbook_result.rc != 0 # <- Uses the return code to define when the task has changed.
 

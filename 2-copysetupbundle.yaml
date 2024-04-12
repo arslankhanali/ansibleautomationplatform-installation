@@ -1,7 +1,7 @@
 ---
 - name: Copy and Extract setup bundle for AAP containerised 3Gb
   hosts: all
-  become: true
+  # become: true
   gather_facts: false
   vars_files:
     - vars.yaml
@@ -9,23 +9,16 @@
     - name: Copy file
       ansible.builtin.copy:
         src: "{{ setup }}"
-        dest: /home/rc/
+        dest: "{{ hostfolder }}"
         mode: "0644"
 
     - name: Extract archive
       ansible.builtin.unarchive:
-        src: /home/rc/{{ setup }}
-        dest: /home/rc/
+        src: "{{ hostfolder }}/{{ setup }}"
+        dest: "{{ hostfolder }}"
         remote_src: true
 
     - name: Delete file
       ansible.builtin.file:
-        path: "/home/rc/{{ setupfolder }}"
+        path: "{{ hostfolder }}/{{ setup }}"
         state: absent
-
-    - name: Replace inventory file
-      ansible.builtin.copy:
-        src: aap_inventory
-        dest: /home/rc/{{ setupfolder }}/inventory
-        force: true
-        mode: "0644"
